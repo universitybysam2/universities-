@@ -1062,6 +1062,9 @@ const GrantTracking: React.FC<GrantTrackingProps> = ({ onNavigate }) => {
                   return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                 };
                 
+                // Show 0.00 during first 24 hours (isHidden), actual amount after 24 hours
+                const displayAmount = status.isHidden ? '0.00' : formatAmount(trackingState.currentUser?.amount);
+                
                 return (
                   <div className="space-y-6">
                     {/* AVAILABLE BALANCE CARD - Right Below Timer */}
@@ -1071,7 +1074,7 @@ const GrantTracking: React.FC<GrantTrackingProps> = ({ onNavigate }) => {
                           <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide mb-3">Available Balance</p>
                           <div className="flex items-baseline gap-3 flex-wrap">
                             <span className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white break-words">
-                              {privacySettings.hideBalance ? '••••' : `$${formatAmount(trackingState.currentUser?.amount)}`}
+                              {privacySettings.hideBalance ? '••••' : `$${displayAmount}`}
                             </span>
                             <button
                               onClick={() => setPrivacySettings({...privacySettings, hideBalance: !privacySettings.hideBalance})}
