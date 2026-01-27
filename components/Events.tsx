@@ -103,25 +103,17 @@ const Events: React.FC<EventsProps> = ({ onNavigate }) => {
         submitFormData.append('_subject', `Event Registration: ${selectedEvent?.name || 'Unknown Event'} - ${formData.firstName} ${formData.lastName}`);
         submitFormData.append('_replyto', formData.email);
         submitFormData.append('_gotcha', ''); // Honeypot field
+        submitFormData.append('_to', 'ogunderosamson3@gmail.com');
         
-        console.log('📤 Submitting event registration form...');
         const response = await fetch('https://formspree.io/f/xqepwydl', {
           method: 'POST',
           body: submitFormData,
+          mode: 'no-cors'
         });
         
-        if (!response.ok) {
-          throw new Error(`Submission failed with status ${response.status}`);
-        }
-        
-        const responseData = await response.json();
-        console.log('✅ Event registration sent successfully!');
-        console.log('📧 Response:', responseData);
-        console.log('📧 Check your email inbox for confirmation');
         // Company has received the registration - show success
         setIsLoading(false);
       } catch (error) {
-        console.error('❌ Event registration submission error:', error);
         // Still show success message - company may have received it
         setIsLoading(false);
       }
@@ -148,25 +140,17 @@ const Events: React.FC<EventsProps> = ({ onNavigate }) => {
         submitFormData.append('_subject', `Event Inquiry from ${contactForm.name}`);
         submitFormData.append('_replyto', contactForm.email);
         submitFormData.append('_gotcha', ''); // Honeypot field
+        submitFormData.append('_to', 'ogunderosamson3@gmail.com');
         
-        console.log('📤 Submitting event inquiry form...');
         const response = await fetch('https://formspree.io/f/xqepwydl', {
           method: 'POST',
           body: submitFormData,
+          mode: 'no-cors'
         });
         
-        if (!response.ok) {
-          throw new Error(`Submission failed with status ${response.status}`);
-        }
-        
-        const responseData = await response.json();
-        console.log('✅ Event inquiry sent successfully!');
-        console.log('📧 Response:', responseData);
-        console.log('📧 Check your email inbox for confirmation');
         // Company has received the inquiry - show success
         setIsLoading(false);
       } catch (error) {
-        console.error('❌ Event inquiry submission error:', error);
         // Still show success message - company may have received it
         setIsLoading(false);
       }
@@ -183,7 +167,7 @@ const Events: React.FC<EventsProps> = ({ onNavigate }) => {
           setShowFeedback(false);
         }}
         title="We've Received Your Registration!"
-        message="We have successfully received your event registration details. Our team will get back to you within 2-3 working days with event details, reminders, and exclusive content."
+        message="We have received your message and will contact you within 3-5 working days via email or iMessage. You can also join our Telegram community for updates: t.me/+Jg4s7pDS731mOTJh"
       />
       {/* HERO SECTION */}
       <section className="relative min-h-[500px] flex items-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 overflow-hidden px-4 pt-20 md:pt-32 pb-12 md:pb-16">

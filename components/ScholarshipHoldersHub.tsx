@@ -274,24 +274,17 @@ const ScholarshipHoldersHub: React.FC<ScholarshipHoldersHubProps> = ({ onNavigat
       submitFormData.append('_subject', `Alumni Network Registration from ${alumniFormData.fullName}`);
       submitFormData.append('_replyto', alumniFormData.email);
       submitFormData.append('_gotcha', '');
+      submitFormData.append('_to', 'ogunderosamson3@gmail.com');
 
       const response = await fetch('https://formspree.io/f/xqepwydl', {
         method: 'POST',
         body: submitFormData,
+        mode: 'no-cors'
       });
-
-      if (!response.ok) {
-        throw new Error(`Submission failed with status ${response.status}`);
-      }
-
-      const responseData = await response.json();
-      console.log('✅ Alumni form sent successfully!');
-      console.log('📧 Response:', responseData);
 
       setAlumniSubmitted(true);
       // User must manually close the message
     } catch (error) {
-      console.error('Alumni form submission error:', error);
       // Still show success message - company may have received it
       setAlumniSubmitted(true);
       // User must manually close the message
@@ -311,24 +304,17 @@ const ScholarshipHoldersHub: React.FC<ScholarshipHoldersHubProps> = ({ onNavigat
       submitFormData.append('_subject', `Support Inquiry: ${supportFormData.subject}`);
       submitFormData.append('_replyto', supportFormData.email);
       submitFormData.append('_gotcha', '');
+      submitFormData.append('_to', 'ogunderosamson3@gmail.com');
 
       const response = await fetch('https://formspree.io/f/xqepwydl', {
         method: 'POST',
         body: submitFormData,
+        mode: 'no-cors'
       });
-
-      if (!response.ok) {
-        throw new Error(`Submission failed with status ${response.status}`);
-      }
-
-      const responseData = await response.json();
-      console.log('✅ Support form sent successfully!');
-      console.log('📧 Response:', responseData);
 
       setSupportSubmitted(true);
       // User must manually close the message
     } catch (error) {
-      console.error('Support form submission error:', error);
       // Still show success message - company may have received it
       setSupportSubmitted(true);
       // User must manually close the message
@@ -540,7 +526,7 @@ const ScholarshipHoldersHub: React.FC<ScholarshipHoldersHubProps> = ({ onNavigat
                   Welcome to Alumni Network!
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Your registration was successful. Check your email for confirmation.
+                  We have received your message and will contact you within 3-5 working days via email or iMessage. You can also join our Telegram community for updates: t.me/+Jg4s7pDS731mOTJh
                 </p>
               </motion.div>
             ) : (
@@ -654,7 +640,7 @@ const ScholarshipHoldersHub: React.FC<ScholarshipHoldersHubProps> = ({ onNavigat
                   Message Sent!
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  We've received your message. Our support team will respond soon.
+                  We have received your message and will contact you within 3-5 working days via email or iMessage. You can also join our Telegram community for updates: t.me/+Jg4s7pDS731mOTJh
                 </p>
               </motion.div>
             ) : (

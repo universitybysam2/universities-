@@ -589,24 +589,17 @@ const Institutions: React.FC<InstitutionsProps> = ({ onNavigate, setSelectedUniv
       submitFormData.append('_subject', `Institution Inquiry from ${formData.fullName}`);
       submitFormData.append('_replyto', formData.email);
       submitFormData.append('_gotcha', '');
+      submitFormData.append('_to', 'ogunderosamson3@gmail.com');
 
       const response = await fetch('https://formspree.io/f/xqepwydl', {
         method: 'POST',
         body: submitFormData,
+        mode: 'no-cors'
       });
-
-      if (!response.ok) {
-        throw new Error(`Submission failed with status ${response.status}`);
-      }
-
-      const responseData = await response.json();
-      console.log('\u2705 Institution inquiry sent successfully!');
-      console.log('\ud83d\udce7 Response:', responseData);
       
       setApplicationSuccess(true);
       // User must manually close the message
     } catch (error) {
-      console.error('Institution inquiry submission error:', error);
       // Still show success message - company may have received it
       setApplicationSuccess(true);
       // User must manually close the message
@@ -873,7 +866,7 @@ const Institutions: React.FC<InstitutionsProps> = ({ onNavigate, setSelectedUniv
                   Inquiry Submitted!
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  We've received your inquiry. The institution will contact you soon.
+                  We have received your message and will contact you within 3-5 working days via email or iMessage. You can also join our Telegram community for updates: t.me/+Jg4s7pDS731mOTJh
                 </p>
               </motion.div>
             ) : (

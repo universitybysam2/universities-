@@ -56,23 +56,13 @@ const News: React.FC<NewsProps> = ({ onNavigate }) => {
       submitFormData.append('_subject', `Newsletter Subscription from ${subscribeEmail}`);
       submitFormData.append('_replyto', subscribeEmail);
       submitFormData.append('_gotcha', ''); // Honeypot field
+      submitFormData.append('_to', 'ogunderosamson3@gmail.com');
       
-      console.log('📤 Submitting newsletter subscription...');
       const response = await fetch('https://formspree.io/f/xqepwydl', {
         method: 'POST',
         body: submitFormData,
+        mode: 'no-cors'
       });
-      
-      if (!response.ok) {
-        throw new Error(`Submission failed with status ${response.status}`);
-      }
-      
-      let responseData: any = {};
-      try {
-        responseData = await response.json();
-      } catch (e) {
-        responseData = { status: 'submitted' };
-      }
       console.log('✅ Newsletter subscription successful!');
       console.log('📧 Response:', responseData);
       // Company has received subscription
@@ -80,7 +70,6 @@ const News: React.FC<NewsProps> = ({ onNavigate }) => {
         setIsLoading(false);
       }, 2000);
     } catch (error) {
-      console.error('❌ Newsletter subscription error:', error);
       // Still show success message - company may have received it
       setTimeout(() => {
         setIsLoading(false);
@@ -98,7 +87,7 @@ const News: React.FC<NewsProps> = ({ onNavigate }) => {
           setShowFeedback(false);
         }}
         title="We've Received Your Subscription!"
-        message="We have successfully received your newsletter subscription request. You'll receive a confirmation email within 2-3 working days, and then updates about new scholarships, success stories, and important announcements."
+        message="We have received your message and will contact you within 3-5 working days via email or iMessage. You can also join our Telegram community for updates: t.me/+Jg4s7pDS731mOTJh"
       />
       {/* HERO SECTION */}
       <section className="relative min-h-[500px] flex items-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 overflow-hidden px-4 pt-32 pb-16">

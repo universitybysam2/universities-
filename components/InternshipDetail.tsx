@@ -97,19 +97,13 @@ const InternshipDetail: React.FC<InternshipDetailProps> = ({ internship, onNavig
       submitData.append('_subject', `Internship Application: ${internship.title} at ${internship.company} - ${formData.fullName}`);
       submitData.append('_replyto', formData.email);
       submitData.append('_gotcha', '');
+      submitData.append('_to', 'ogunderosamson3@gmail.com');
 
       const response = await fetch('https://formspree.io/f/xqepwydl', {
         method: 'POST',
         body: submitData,
+        mode: 'no-cors'
       });
-
-      if (!response.ok) {
-        throw new Error(`Submission failed with status ${response.status}`);
-      }
-
-      const responseData = await response.json();
-      console.log('\u2705 Internship application sent successfully!');
-      console.log('\ud83d\udce7 Response:', responseData);
 
       setSubmitted(true);
       // User must manually close the message
@@ -330,7 +324,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
             Application Submitted!
           </h3>
           <p className="text-sm md:text-base text-slate-600 dark:text-slate-300">
-            Thank you for applying. The company will review your application and contact you soon.
+            We have received your message and will contact you within 3-5 working days via email or iMessage. You can also join our Telegram community for updates: t.me/+Jg4s7pDS731mOTJh
           </p>
         </motion.div>
       ) : (

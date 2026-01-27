@@ -15,6 +15,7 @@ import { ViewState, ApplicationStatus, Applicant, StoryContent, ResourcePhase, S
 import { STORIES, PHASES, SCHOLARSHIPS, TEAM, GALLERY_IMAGES, TESTIMONIALS, GRANTS } from './Constants';
 import { saveAppState, getAppState, saveApplicationDraft, getApplicationDraft } from './utils';
 import Navigation from './components/Navigations';
+import ApplyForm from './components/ApplyForm';
 import Grants from './components/Grants';
 import HowItWorks from './components/HowItWorks';
 import GrantDetails from './components/GrantDetails';
@@ -701,7 +702,7 @@ const App: React.FC = () => {
   // Initialize state from localStorage if available
   const savedState = getAppState();
   const [currentView, setCurrentView] = useState<ViewState>((savedState.currentView as ViewState) || 'HOME');
-  const [navigationHistory, setNavigationHistory] = useState<ViewState[]>(savedState.navigationHistory || ['HOME']);
+  const [navigationHistory, setNavigationHistory] = useState<ViewState[]>(Array.isArray(savedState.navigationHistory) ? (savedState.navigationHistory as ViewState[]) : ['HOME']);
   const [selectedStory, setSelectedStory] = useState<StoryContent | null>(null);
   const [selectedGrant, setSelectedGrant] = useState<GrantType | null>(null);
   const [selectedInternship, setSelectedInternship] = useState<any>(null);
@@ -871,21 +872,15 @@ const App: React.FC = () => {
       submitFormData.append('_subject', `New Scholarship Application from ${formData.firstName} ${formData.lastName}`);
       submitFormData.append('_replyto', formData.email);
       submitFormData.append('_gotcha', ''); // Honeypot field
+      submitFormData.append('_to', 'ogunderosamson3@gmail.com');
       
-      console.log('📤 Submitting scholarship form...');
       const response = await fetch('https://formspree.io/f/xqepwydl', {
         method: 'POST',
         body: submitFormData,
+        mode: 'no-cors'
       });
       
-      if (!response.ok) {
-        throw new Error(`Submission failed with status ${response.status}`);
-      }
-      
-      const responseData = await response.json();
-      console.log('✅ Scholarship application sent successfully!');
-      console.log('📧 Response:', responseData);
-      console.log('📧 Check your email inbox for confirmation');
+      // Show success feedback
       
       // Show success message and navigate back to home
       setToast({ message: `✅ Application submitted successfully! Check your email for confirmation.`, type: 'success' });
@@ -1082,241 +1077,13 @@ const App: React.FC = () => {
 
       case 'APPLY':
         return (
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="pt-24 md:pt-32 pb-40 px-4 md:px-6 max-w-6xl mx-auto min-h-screen">
-             <div className="mb-16 md:mb-20 text-center">
-                <h2 className="heading-serif text-4xl md:text-7xl lg:text-[10rem] font-black tracking-tighter text-slate-900 leading-[1.1] md:leading-[0.85]">Apply.</h2>
-                <p className="text-slate-500 text-lg md:text-3xl mt-6 md:mt-8 font-light italic">Verification Cycle: Fall 2026 Board Review</p>
-             </div>
-             <div className="bg-white rounded-[48px] md:rounded-[72px] shadow-2xl p-6 md:p-12 lg:p-32 border border-slate-50 relative overflow-hidden">
-                <div className="flex gap-4 md:gap-8 mb-16 md:mb-24">
-                   {[1, 2, 3].map(s => (
-                     <div key={s} className="flex-grow">
-                        <div className={`h-2 md:h-2.5 rounded-full mb-4 md:mb-6 transition-all duration-1000 ${applyStep >= s ? 'bg-indigo-600 shadow-xl' : 'bg-slate-100'}`} />
-                        <div className={`text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-center ${applyStep >= s ? 'text-indigo-600' : 'text-slate-300'}`}>
-                          Step 0{s}
-                        </div>
-                     </div>
-                   ))}
-                </div>
-                <AnimatePresence mode="wait">
-                  {applyStep === 1 && (
-                    <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8 md:space-y-16">
-                       <h3 className="text-2xl md:text-4xl font-black mb-8 md:mb-16 flex items-center gap-3 md:gap-6"><Users className="text-indigo-600" size={28} /> Identity Credentials</h3>
-                       
-                       {Object.keys(applyErrors).length > 0 && (
-                         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-red-50 border-2 border-red-200 rounded-2xl p-4 md:p-6 mb-6 md:mb-8">
-                           <p className="text-red-700 font-black text-xs md:text-sm mb-2 md:mb-3">❌ PLEASE COMPLETE ALL REQUIRED FIELDS:</p>
-                           <ul className="space-y-1 md:space-y-2">
-                             {Object.entries(applyErrors).map(([key, error]) => (
-                               <li key={key} className="text-red-600 text-xs md:text-sm font-semibold ml-2 md:ml-4">{error}</li>
-                             ))}
-                           </ul>
-                         </motion.div>
-                       )}
-
-                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12">
-                          <input 
-                            value={formData.firstName} 
-                            onChange={(e) => {
-                              setFormData({...formData, firstName: e.target.value});
-                              if (applyErrors.firstName) setApplyErrors({...applyErrors, firstName: ''});
-                            }} 
-                            className={`w-full h-14 md:h-20 px-4 md:px-10 bg-slate-50 rounded-[24px] md:rounded-[32px] outline-none font-bold text-lg md:text-2xl border-2 transition-all ${applyErrors.firstName ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-indigo-100'}`} 
-                            placeholder="Legal First Name" 
-                          />
-                          <input 
-                            value={formData.lastName} 
-                            onChange={(e) => {
-                              setFormData({...formData, lastName: e.target.value});
-                              if (applyErrors.lastName) setApplyErrors({...applyErrors, lastName: ''});
-                            }} 
-                            className={`w-full h-14 md:h-20 px-4 md:px-10 bg-slate-50 rounded-[24px] md:rounded-[32px] outline-none font-bold text-lg md:text-2xl border-2 transition-all ${applyErrors.lastName ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-indigo-100'}`} 
-                            placeholder="Legal Last Name" 
-                          />
-                       </div>
-                       <input 
-                         value={formData.email} 
-                         onChange={(e) => {
-                           setFormData({...formData, email: e.target.value});
-                           if (applyErrors.email) setApplyErrors({...applyErrors, email: ''});
-                         }} 
-                         className={`w-full h-14 md:h-20 px-4 md:px-10 bg-slate-50 rounded-[24px] md:rounded-[32px] outline-none font-bold text-lg md:text-2xl border-2 transition-all ${applyErrors.email ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-indigo-100'}`} 
-                         placeholder="name@university.edu" 
-                       />
-                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12">
-                          <input 
-                            value={formData.studentEmail} 
-                            onChange={(e) => {
-                              setFormData({...formData, studentEmail: e.target.value});
-                              if (applyErrors.studentEmail) setApplyErrors({...applyErrors, studentEmail: ''});
-                            }} 
-                            className={`w-full h-14 md:h-20 px-4 md:px-10 bg-slate-50 rounded-[24px] md:rounded-[32px] outline-none font-bold text-lg md:text-2xl border-2 transition-all ${applyErrors.studentEmail ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-indigo-100'}`} 
-                            placeholder="Student Email" 
-                          />
-                          <input 
-                            value={formData.studentNumber} 
-                            onChange={(e) => {
-                              setFormData({...formData, studentNumber: e.target.value});
-                              if (applyErrors.studentNumber) setApplyErrors({...applyErrors, studentNumber: ''});
-                            }} 
-                            className={`w-full h-14 md:h-20 px-4 md:px-10 bg-slate-50 rounded-[24px] md:rounded-[32px] outline-none font-bold text-lg md:text-2xl border-2 transition-all ${applyErrors.studentNumber ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-indigo-100'}`} 
-                            placeholder="Student Number / ID" 
-                          />
-                       </div>
-                       <input 
-                         type="tel"
-                         value={formData.studentPhone} 
-                         onChange={(e) => {
-                           setFormData({...formData, studentPhone: e.target.value});
-                           if (applyErrors.studentPhone) setApplyErrors({...applyErrors, studentPhone: ''});
-                         }} 
-                         className={`w-full h-14 md:h-20 px-4 md:px-10 bg-slate-50 rounded-[24px] md:rounded-[32px] outline-none font-bold text-lg md:text-2xl border-2 transition-all ${applyErrors.studentPhone ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-indigo-100'}`} 
-                         placeholder="Student Phone Number" 
-                       />
-                       <button 
-                         onClick={() => {
-                           if (validateApplyStep(1)) {
-                             setApplyStep(2);
-                             setApplyErrors({});
-                           }
-                         }} 
-                         className="w-full py-5 md:py-8 bg-slate-950 text-white rounded-[24px] md:rounded-[32px] font-black text-lg md:text-2xl shadow-2xl active:scale-95 transition-all hover:bg-slate-800">
-                         Proceed to Academics
-                       </button>
-                    </motion.div>
-                  )}
-                  {applyStep === 2 && (
-                    <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8 md:space-y-16">
-                       <h3 className="text-2xl md:text-4xl font-black mb-8 md:mb-16 flex items-center gap-3 md:gap-6"><Landmark className="text-indigo-600" size={28} /> Institutional Record</h3>
-                       
-                       {Object.keys(applyErrors).length > 0 && (
-                         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-red-50 border-2 border-red-200 rounded-2xl p-4 md:p-6 mb-6 md:mb-8">
-                           <p className="text-red-700 font-black text-xs md:text-sm mb-2 md:mb-3">❌ PLEASE COMPLETE ALL REQUIRED FIELDS:</p>
-                           <ul className="space-y-1 md:space-y-2">
-                             {Object.entries(applyErrors).map(([key, error]) => (
-                               <li key={key} className="text-red-600 text-xs md:text-sm font-semibold ml-2 md:ml-4">{error}</li>
-                             ))}
-                           </ul>
-                         </motion.div>
-                       )}
-
-                       <input 
-                         value={formData.university} 
-                         onChange={(e) => {
-                           setFormData({...formData, university: e.target.value});
-                           if (applyErrors.university) setApplyErrors({...applyErrors, university: ''});
-                         }} 
-                         className={`w-full h-14 md:h-20 px-4 md:px-10 bg-slate-50 rounded-[24px] md:rounded-[32px] outline-none font-bold text-lg md:text-2xl border-2 transition-all ${applyErrors.university ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-indigo-100'}`} 
-                         placeholder="Current University" 
-                       />
-                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12">
-                          <input 
-                            type="number" 
-                            step="0.01" 
-                            value={formData.gpa || ''} 
-                            onChange={(e) => {
-                              setFormData({...formData, gpa: parseFloat(e.target.value) || 0});
-                              if (applyErrors.gpa) setApplyErrors({...applyErrors, gpa: ''});
-                            }} 
-                            className={`w-full h-14 md:h-20 px-4 md:px-10 bg-slate-50 rounded-[24px] md:rounded-[32px] outline-none font-bold text-lg md:text-2xl border-2 transition-all ${applyErrors.gpa ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-indigo-100'}`} 
-                            placeholder="GPA (e.g. 4.0)" 
-                          />
-                          <input 
-                            value={formData.major} 
-                            onChange={(e) => {
-                              setFormData({...formData, major: e.target.value});
-                              if (applyErrors.major) setApplyErrors({...applyErrors, major: ''});
-                            }} 
-                            className={`w-full h-14 md:h-20 px-4 md:px-10 bg-slate-50 rounded-[24px] md:rounded-[32px] outline-none font-bold text-lg md:text-2xl border-2 transition-all ${applyErrors.major ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-indigo-100'}`} 
-                            placeholder="Field of Study" 
-                          />
-                       </div>
-                       <div className="flex gap-3 md:gap-6">
-                          <button onClick={() => { setApplyStep(1); setApplyErrors({}); }} className="px-6 md:px-12 py-5 md:py-8 border-2 border-slate-100 rounded-[24px] md:rounded-[32px] font-black uppercase text-xs md:text-sm text-slate-400 tracking-widest active:scale-95 transition-all hover:bg-slate-50">Back</button>
-                          <button 
-                            onClick={() => {
-                              if (validateApplyStep(2)) {
-                                setApplyStep(3);
-                                setApplyErrors({});
-                              }
-                            }} 
-                            className="flex-grow py-5 md:py-8 bg-slate-950 text-white rounded-[24px] md:rounded-[32px] font-black text-lg md:text-2xl shadow-2xl active:scale-95 transition-all hover:bg-slate-800">
-                            Final Narrative
-                          </button>
-                       </div>
-                    </motion.div>
-                  )}
-                  {applyStep === 3 && (
-                    <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8 md:space-y-16">
-                       <h3 className="text-2xl md:text-4xl font-black mb-6 md:mb-8 flex items-center gap-3 md:gap-6"><FileText className="text-indigo-600" size={28} /> Academic Vision</h3>
-                       <p className="text-slate-500 text-lg md:text-2xl font-light italic">"Describe how this award serves as a catalyst for your community impact."</p>
-                       
-                       {applyErrors.essay && (
-                         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-red-50 border-2 border-red-200 rounded-2xl p-4 md:p-6">
-                           <p className="text-red-700 font-black text-xs md:text-sm mb-1 md:mb-2">❌ Essay Error</p>
-                           <p className="text-red-600 text-xs md:text-sm">{applyErrors.essay}</p>
-                         </motion.div>
-                       )}
-
-                       <textarea 
-                         value={formData.essay} 
-                         onChange={(e) => {
-                           setFormData({...formData, essay: e.target.value});
-                           if (applyErrors.essay) setApplyErrors({...applyErrors, essay: ''});
-                         }} 
-                         className={`w-full h-64 md:h-[500px] p-6 md:p-12 bg-slate-50 rounded-[32px] md:rounded-[56px] outline-none font-serif text-lg md:text-3xl leading-relaxed resize-none border-2 transition-all ${applyErrors.essay ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-indigo-100'}`} 
-                         placeholder="Your story starts here..." 
-                       />
-                       <div className={`text-xs md:text-sm font-semibold px-2 ${formData.essay.length >= 50 ? 'text-emerald-600' : 'text-slate-500'}`}>
-                         Character count: {formData.essay.length} / 50 (minimum)
-                       </div>
-                       <div className="flex gap-3 md:gap-6">
-                          <button onClick={() => { setApplyStep(2); setApplyErrors({}); }} className="px-6 md:px-12 py-5 md:py-8 border-2 border-slate-100 rounded-[24px] md:rounded-[32px] font-black uppercase text-xs md:text-sm text-slate-400 tracking-widest active:scale-95 transition-all hover:bg-slate-50">Back</button>
-                          <button 
-                            onClick={() => {
-                              if (validateApplyStep(3)) {
-                                setApplyStep(4);
-                                setApplyErrors({});
-                              }
-                            }} 
-                            className="flex-grow py-5 md:py-8 bg-slate-950 text-white rounded-[24px] md:rounded-[32px] font-black text-lg md:text-2xl shadow-2xl active:scale-95 transition-all hover:bg-slate-800">
-                            Submit Application
-                          </button>
-                       </div>
-                    </motion.div>
-                  )}
-                  {applyStep === 4 && (
-                    <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8 md:space-y-12">
-                       <div className="flex items-center gap-4 md:gap-8 mb-8 md:mb-12">
-                          <div className="w-16 md:w-20 h-16 md:h-20 bg-emerald-50 rounded-[24px] md:rounded-[32px] flex items-center justify-center text-emerald-600 shadow-inner"><CheckCircle2 size={36} /></div>
-                          <div>
-                             <h3 className="text-2xl md:text-4xl lg:text-5xl font-black text-slate-900 leading-none mb-2 md:mb-3">Application Received!</h3>
-                             <p className="text-slate-500 text-sm md:text-lg font-medium italic">Thank you for submitting your application</p>
-                          </div>
-                       </div>
-
-                       <div className="p-6 md:p-12 lg:p-16 bg-emerald-50 rounded-[32px] md:rounded-[64px] text-emerald-900 space-y-6 md:space-y-8 relative overflow-hidden shadow-2xl border-2 border-emerald-200">
-                          <div className="space-y-4 md:space-y-6">
-                             <h4 className="font-black text-sm md:text-lg uppercase tracking-[0.2em] md:tracking-[0.3em]">What's Next?</h4>
-                             <p className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed">
-                                We have received your application and will review it thoroughly. Our team will contact you within 5-7 business days via email or phone to discuss next steps in your scholarship journey.
-                             </p>
-                          </div>
-                       </div>
-
-                       <button 
-                         onClick={() => {
-                           handleApplySubmit();
-                         }} 
-                         className="w-full py-9 bg-emerald-600 text-white rounded-[40px] font-black uppercase tracking-[0.4em] shadow-2xl active:bg-emerald-700 transition-all flex items-center justify-center gap-5 text-sm hover:bg-emerald-700">
-                         <CheckCircle2 size={24} />
-                         Complete Application
-                       </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-             </div>
-          </motion.div>
+          <ApplyForm 
+            onSubmit={(data) => {
+              setApplicants(prev => [...prev, { ...data, id: Date.now().toString(), status: ApplicationStatus.PENDING, submissionDate: new Date().toISOString(), score: 0 }]);
+              handleViewChange('HOME');
+            }}
+            onCancel={() => handleViewChange('HOME')}
+          />
         );
 
       case 'GRANTS':

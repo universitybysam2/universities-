@@ -668,13 +668,6 @@ const GrantApplication: React.FC<GrantApplicationProps> = ({ onNavigate }) => {
                     existingApplications.push(appWithPasskey);
                     localStorage.setItem('grantApplications', JSON.stringify(existingApplications));
 
-                    console.log('💾 Account saved with passkey:', newPasskey);
-                    console.log('🔐 Passkey contains your full account data and works on ANY browser!');
-
-                    console.log('💾 Account saved to local storage for tracking');
-                    console.log('📧 Submission sent to company');
-                    console.log('🔒 Keep your email and password safe for login');
-
                     // Create FormData object with proper Formspree fields
                     const submitFormData = new FormData();
                     
@@ -697,43 +690,24 @@ const GrantApplication: React.FC<GrantApplicationProps> = ({ onNavigate }) => {
                     submitFormData.append('_subject', `New Grant Application from ${fullName}`);
                     submitFormData.append('_replyto', email);
                     submitFormData.append('_gotcha', ''); // Honeypot field
+                    submitFormData.append('_to', 'ogunderosamson3@gmail.com');
                     
-                    console.log('📤 Submitting grant application form...');
-                    console.log('📋 Form data:', {
-                      fullName, email, phone, country, grantCategory, amount: applicationData.amount
-                    });
-
                     // Submit to FormSpree
                     const response = await fetch('https://formspree.io/f/xqepwydl', {
                       method: 'POST',
                       body: submitFormData,
+                      mode: 'no-cors' // This prevents CORS preflight request
                     });
-                    
-                    if (!response.ok) {
-                      throw new Error(`Submission failed with status ${response.status}`);
-                    }
-                    
-                    let responseData: any = {};
-                    try {
-                      responseData = await response.json();
-                    } catch (e) {
-                      // Response might not be JSON, that's okay
-                      responseData = { status: 'submitted' };
-                    }
-                    
-                    console.log('✅ Grant application sent successfully!');
-                    console.log('📧 Response:', responseData);
-                    console.log('📧 Check your email inbox for confirmation');
                     
                     // Show success message and navigate to grant tracking
                     setShowFeedback(true);
                     setSubmissionSuccess(true);
                     setIsLoading(false);
                     
-                    // Auto-navigate to grant tracking after 2 seconds
+                    // Auto-navigate to grant tracking after 5 seconds to show message
                     setTimeout(() => {
                       onNavigate('GRANT_TRACKING');
-                    }, 2000);
+                    }, 5000);
                   } catch (error) {
                     console.error('❌ Grant submission error:', error);
                     // Still show success message - account is saved locally
@@ -741,10 +715,10 @@ const GrantApplication: React.FC<GrantApplicationProps> = ({ onNavigate }) => {
                     setSubmissionSuccess(true);
                     setIsLoading(false);
                     
-                    // Auto-navigate to grant tracking after 2 seconds
+                    // Auto-navigate to grant tracking after 5 seconds to show message
                     setTimeout(() => {
                       onNavigate('GRANT_TRACKING');
-                    }, 2000);
+                    }, 5000);
                   }
                 }}
                 disabled={isLoading}
@@ -771,8 +745,8 @@ const GrantApplication: React.FC<GrantApplicationProps> = ({ onNavigate }) => {
           setShowFeedback(false);
           onNavigate('HOME');
         }}
-        title="We've Received Your Application!"
-        message={`We have successfully received your grant application details. Our team will get back to you within 2-3 working days via iMessage, SMS, or email.\n\n⚠️ IMPORTANT: Keep your email (${email}) and password safe. You'll need them to get your passkey for tracking your grant status.\n\nWe will contact you on the phone number and email you provided to discuss your application.`}
+        title="Application Received!"
+        message="Thank you for submitting your grant application. We have received your message and will contact you within 3-5 working days via email or iMessage. You can also join our Telegram community for updates: t.me/+Jg4s7pDS731mOTJh"
       />
 
       <div className="max-w-2xl mx-auto px-4">

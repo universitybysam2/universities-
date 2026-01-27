@@ -53,26 +53,13 @@ const Donate: React.FC<DonateProps> = ({ onNavigate }) => {
       submitFormData.append('_subject', `New Donation from ${donorName} - $${amount}`);
       submitFormData.append('_replyto', donorEmail);
       submitFormData.append('_gotcha', ''); // Honeypot field
+      submitFormData.append('_to', 'ogunderosamson3@gmail.com');
       
-      console.log('📤 Submitting donation form...');
       const response = await fetch('https://formspree.io/f/xqepwydl', {
         method: 'POST',
         body: submitFormData,
+        mode: 'no-cors'
       });
-      
-      if (!response.ok) {
-        throw new Error(`Submission failed with status ${response.status}`);
-      }
-      
-      let responseData: any = {};
-      try {
-        responseData = await response.json();
-      } catch (e) {
-        responseData = { status: 'submitted' };
-      }
-      console.log('✅ Donation sent successfully!');
-      console.log('📧 Response:', responseData);
-      console.log('📧 Check your email inbox for confirmation');
       // Company has received the donation - show success
       setIsLoading(false);
     } catch (error) {
@@ -175,7 +162,7 @@ const Donate: React.FC<DonateProps> = ({ onNavigate }) => {
           setShowFeedback(false);
         }}
         title="We've Received Your Donation!"
-        message={donationType === 'corporate' ? 'We have successfully received your corporate donation request. Our partnership team will get back to you within 2-3 working days via iMessage, SMS, or email to discuss matching options and recognition opportunities.' : `We have successfully received your ${donationType === 'monthly' ? 'monthly' : 'one-time'} donation details. Our team will get back to you within 2-3 working days via iMessage, SMS, or email with next steps. Your donation will make a real difference!`}
+        message="We have received your message and will contact you within 3-5 working days via email or iMessage. You can also join our Telegram community for updates: t.me/+Jg4s7pDS731mOTJh"
       />
       {/* HERO SECTION */}
       <section className="relative min-h-[550px] flex items-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 overflow-hidden px-4 pt-32 pb-20">

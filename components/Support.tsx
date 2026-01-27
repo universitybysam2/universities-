@@ -45,22 +45,21 @@ const Support: React.FC<SupportProps> = ({ onNavigate }) => {
       formData.append('formType', 'Appointment Booking');
       formData.append('_subject', `New Appointment Request from ${appointmentForm.name}`);
       formData.append('_replyto', appointmentForm.email);
+      formData.append('_to', 'ogunderosamson3@gmail.com');
 
       const response = await fetch('https://formspree.io/f/xqepwydl', {
         method: 'POST',
         body: formData,
+        mode: 'no-cors'
       });
 
-      if (response.ok) {
-        setAppointmentSubmitted(true);
-        setTimeout(() => {
-          setShowAppointmentModal(false);
-          setAppointmentSubmitted(false);
-          setAppointmentForm({ name: '', email: '', phone: '', date: '', time: '', purpose: '' });
-        }, 2000);
-      }
+      setAppointmentSubmitted(true);
+      setTimeout(() => {
+        setShowAppointmentModal(false);
+        setAppointmentSubmitted(false);
+        setAppointmentForm({ name: '', email: '', phone: '', date: '', time: '', purpose: '' });
+      }, 2000);
     } catch (error) {
-      console.error('Error submitting appointment:', error);
       alert('Error booking appointment. Please try again.');
     }
   };
@@ -668,7 +667,7 @@ const Support: React.FC<SupportProps> = ({ onNavigate }) => {
                           Appointment Request Submitted!
                         </p>
                         <p className="text-slate-600 dark:text-slate-400">
-                          We'll confirm your appointment within 24 hours via email.
+                          We have received your message and will contact you within 3-5 working days via email or iMessage. You can also join our Telegram community for updates: t.me/+Jg4s7pDS731mOTJh
                         </p>
                       </motion.div>
                     ) : (
