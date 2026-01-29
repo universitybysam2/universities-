@@ -241,15 +241,15 @@ Submitted on: ${new Date().toLocaleString()}
       case 1:
         return (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-            <h2 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white">Personal Information</h2>
-            <p className="text-slate-600 dark:text-slate-400">Let's start with your basic information</p>
+            <h2 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white">Student Personal Information</h2>
+            <p className="text-slate-600 dark:text-slate-400">Please provide your basic personal details</p>
 
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <input
                     type="text"
-                    placeholder="First Name *"
+                    placeholder="Student First Name *"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
@@ -263,7 +263,7 @@ Submitted on: ${new Date().toLocaleString()}
                 <div>
                   <input
                     type="text"
-                    placeholder="Last Name *"
+                    placeholder="Student Last Name *"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
@@ -278,7 +278,7 @@ Submitted on: ${new Date().toLocaleString()}
               <div>
                 <input
                   type="email"
-                  placeholder="Email Address *"
+                  placeholder="Student Email Address *"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
@@ -293,7 +293,7 @@ Submitted on: ${new Date().toLocaleString()}
                 <div>
                   <input
                     type="tel"
-                    placeholder="Phone Number *"
+                    placeholder="Student Phone Number *"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
@@ -307,7 +307,7 @@ Submitted on: ${new Date().toLocaleString()}
                 <div>
                   <input
                     type="date"
-                    placeholder="Date of Birth *"
+                    placeholder="Student Date of Birth *"
                     name="dateOfBirth"
                     value={formData.dateOfBirth}
                     onChange={handleChange}
@@ -329,7 +329,7 @@ Submitted on: ${new Date().toLocaleString()}
                       errors.gender ? 'border-red-500 focus:border-red-500' : 'border-slate-200 dark:border-slate-700 focus:border-indigo-600'
                     }`}
                   >
-                    <option value="">Select Gender *</option>
+                    <option value="">Select Student Gender *</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
@@ -340,7 +340,7 @@ Submitted on: ${new Date().toLocaleString()}
                 <div>
                   <input
                     type="text"
-                    placeholder="Country *"
+                    placeholder="Student Country *"
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
@@ -354,7 +354,7 @@ Submitted on: ${new Date().toLocaleString()}
 
               <div>
                 <textarea
-                  placeholder="Full Address *"
+                  placeholder="Student Full Address *"
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
