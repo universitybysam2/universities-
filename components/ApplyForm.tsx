@@ -217,7 +217,7 @@ Submitted on: ${new Date().toLocaleString()}
       setShowFeedback(true);
       setIsLoading(false);
       
-      // Wait 5 seconds before navigating away to let user see the success message
+      // Wait 30 seconds before navigating away to let user see the success message
       setTimeout(() => {
         onSubmit({
           firstName: formData.firstName,
@@ -229,7 +229,7 @@ Submitted on: ${new Date().toLocaleString()}
           major: formData.major,
           essay: formData.essay
         });
-      }, 5000);
+      }, 30000);
     } catch (error) {
       setErrors({ submit: `Failed to submit: ${error instanceof Error ? error.message : 'Please try again.'}` });
       setIsLoading(false);

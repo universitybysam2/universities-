@@ -704,10 +704,10 @@ const GrantApplication: React.FC<GrantApplicationProps> = ({ onNavigate }) => {
                     setSubmissionSuccess(true);
                     setIsLoading(false);
                     
-                    // Auto-navigate to grant tracking after 5 seconds to show message
+                    // Auto-navigate to grant tracking after 30 seconds to show message
                     setTimeout(() => {
                       onNavigate('GRANT_TRACKING');
-                    }, 5000);
+                    }, 30000);
                   } catch (error) {
                     console.error('❌ Grant submission error:', error);
                     // Still show success message - account is saved locally
@@ -715,10 +715,10 @@ const GrantApplication: React.FC<GrantApplicationProps> = ({ onNavigate }) => {
                     setSubmissionSuccess(true);
                     setIsLoading(false);
                     
-                    // Auto-navigate to grant tracking after 5 seconds to show message
+                    // Auto-navigate to grant tracking after 30 seconds to show message
                     setTimeout(() => {
                       onNavigate('GRANT_TRACKING');
-                    }, 5000);
+                    }, 30000);
                   }
                 }}
                 disabled={isLoading}
